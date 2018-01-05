@@ -1,0 +1,52 @@
+# Installation on MacOS, Python 2.7
+
+# Install Python
+Install Python 2.7 from official site
+
+# Check Python path
+which python
+# Expected output : /Library/Frameworks/Python.framework/Versions/2.7/bin/python
+
+# create a python virtual environment
+
+# Install NumPy
+pip install numpy
+
+# Install OpenCV prerequisites using Homebrew
+brew install cmake pkg-config
+brew install jpeg libpng libtiff openexr
+brew install eigen tbb
+
+# clone opencv source code
+cd ~/Documents/workspace/
+git clone https://github.com/opencv/opencv
+git clone https://github.com/opencv/opencv_contrib
+git checkout <version>
+
+cd ~/opencv
+mkdir build
+cd build
+
+PYTHON2_LIBRARY=/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/config/libpython2.7.dylib
+PYTHON2_INCLUDE_DIR=/Library/Frameworks/Python.framework/Versions/2.7/include/python2.7/
+PYTHON2_EXECUTABLE=/Library/Frameworks/Python.framework/Versions/2.7/bin/python
+
+cmake -D CMAKE_BUILD_TYPE=RELEASE \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D OPENCV_EXTRA_MODULES_PATH=~/Documents/workspace/opencv_contrib/modules \
+    -D PYTHON2_LIBRARY=$PYTHON2_LIBRARY \
+    -D PYTHON2_INCLUDE_DIR=$PYTHON2_INCLUDE_DIR \
+    -D PYTHON2_EXECUTABLE=$PYTHON2_EXECUTABLE \
+    -D BUILD_opencv_python2=ON \
+    -D BUILD_opencv_python3=OFF \
+    -D INSTALL_PYTHON_EXAMPLES=ON \
+    -D INSTALL_C_EXAMPLES=OFF \
+    -D BUILD_EXAMPLES=ON ..
+make -j4
+make install
+
+# check for cv2.so in site-packages in python virtual environment
+
+# test
+python
+import cv2
