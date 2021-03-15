@@ -1,4 +1,4 @@
-# Installation on MacOS, Python 2.7
+## Installation on MacOS, Python 2.7
 
 # Install Python
 Install Python 2.7 from official site
@@ -8,6 +8,9 @@ which python
 # Expected output : /Library/Frameworks/Python.framework/Versions/2.7/bin/python
 
 # create a python virtual environment
+easy_install pip
+pip install virtualenv
+virtualenv <dir_path>
 
 # Install NumPy
 pip install numpy
@@ -21,7 +24,7 @@ brew install eigen tbb
 cd ~/Documents/workspace/
 git clone https://github.com/opencv/opencv
 git clone https://github.com/opencv/opencv_contrib
-git checkout <version>
+git checkout <version>(3.4.0 at the time of writing)
 
 cd ~/opencv
 mkdir build
@@ -50,3 +53,11 @@ make install
 # test
 python
 import cv2
+
+# optional linking
+ln -s /Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages cv2.so
+
+
+# references
+https://gist.github.com/rizkyario/a15fc19d11af7cf29ad4f8250e809698
+https://www.pyimagesearch.com/2015/06/15/install-opencv-3-0-and-python-2-7-on-osx/

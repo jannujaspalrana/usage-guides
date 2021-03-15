@@ -1,0 +1,15 @@
+# Install Jupyter on CentOS
+
+# Install python
+
+# Install Jupyter using pip
+pip install jupyter
+
+
+## issues
+
+#import error on pysqlite2
+install sqlite-devel
+recomplie python with additional config --enable-loadable-sqlite-extensions
+    ./configure --enable-loadable-sqlite-extensions
+https://stackoverflow.com/questions/1210664/no-module-named-sqlite3

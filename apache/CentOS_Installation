@@ -1,0 +1,39 @@
+## Install Apache httpd on CentOS
+
+# Download
+wget http://www-us.apache.org/dist//httpd/httpd-2.4.33.tar.gz
+
+# Download APR and APR-Util
+wget http://www-us.apache.org/dist//apr/apr-1.6.3.tar.gz
+wget http://www-us.apache.org/dist//apr/apr-util-1.6.1.tar.gz
+
+# Unpack, be sure the directory names do not have version numbers
+Unpack APR to /httpd_source_tree_root/srclib/apr
+Unpack APR-Util to /httpd_source_tree_root/srclib/apr-util
+
+# Configure
+./configure --prefix=/opt/apache-httpd --with-included-apr
+optional --with-pcre=<pcre_install_path>
+
+# make and install
+make && make install
+
+# References
+http://httpd.apache.org/docs/2.4/install.html
+
+## Installation issues
+# install PCRE if doesn't exists(In case of CentOS it generally does)
+# download from http://www.pcre.org/
+./configure --prefix=/usr/local/pcre
+make && make install
+(or)
+# for mac
+brew install pcre
+
+# if error msg 'xml/apr_xml.c:35:19: fatal error: expat.h: No such file or directory'
+yum install expat-devel
+
+# if error msg 'collect2: error: ld returned 1 exit status'
+make clean
+make distclean
+# reconfigure and make

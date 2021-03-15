@@ -1,0 +1,40 @@
+## Installation
+
+sudo yum install epel-release
+sudo yum update
+sudo yum install redis
+
+## redis startup
+sudo systemctl start redis
+# to verify redis startup
+redis-cli ping
+# to add redis service to startup
+sudo systemctl enable redis
+
+## redis configuration
+vi /etc/redis.conf
+# add/change following configuration
+bind <ip>
+maxmemory <max-memory>
+maxmemory-policy <policy>
+# only for slaves
+slaveof <ip> <port>
+
+## redis-sentinel configuration
+vi /etc/redis-sentinel.conf
+bind <ip>
+# master ip will be same for all nodes including master and slave nodes
+sentinel monitor <cluster-name> <master-ip> <port> <quoram>
+sentinel down-after-milliseconds <cluster-name> 5000
+sentinel parallel-syncs <cluster-name> 1
+sentinel failover-timeout <cluster-name> 10000
+
+## redis-sentinel startup
+sudo systemctl start redis-sentinel
+# to verify redis startup
+redis-cli ping
+# to add redis service to startup
+sudo systemctl enable redis
+
+## redis-cli
+redis-cli -h 172.24.89.89 -p 26379 sentinel get-master-addr-by-name <cluster-name>

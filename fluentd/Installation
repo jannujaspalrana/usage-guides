@@ -1,0 +1,17 @@
+## Installation on Linux(CentOS)
+
+# Download
+wget http://packages.treasuredata.com.s3.amazonaws.com/2/redhat/2017.09/x86_64/td-agent-2.3.6-0.el2017.x86_64.rpm
+
+# Install
+yum install redhat-lsb-core
+rpm -i td-agent-2.3.6-0.el2017.x86_64.rpm
+yum install gem
+yum install ruby-devel
+
+# Install Additional plugin for writing to elasticsearch
+td-agent-gem install fluent-plugin-elasticsearch
+
+
+# Install Additional plugin for casting strings to appropriate types
+td-agent-gem install fluent-plugin-filter_typecast

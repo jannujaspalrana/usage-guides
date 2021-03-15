@@ -1,0 +1,22 @@
+## Installing Python 3 from sources on CentOS
+
+# Install Dependencies
+sudo yum install openssl-devel
+
+# Download and extract python sources
+wget https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
+tar -xzf Python-3.6.4.tgz
+cd Python-3.6.4
+
+# Install development tools in case of C compiler not found, etc errors
+sudo yum groupinstall "Development Tools"
+
+# configure and build
+./configure --prefix=/usr/local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib"
+make && sudo make altinstall
+
+# python3 installation location
+/usr/local/bin/python3 or /usr/local/bin/python3.6
+
+# creating virtual environment
+/usr/local/bin/python3.6 -m venv py-env/

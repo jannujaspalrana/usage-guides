@@ -1,0 +1,31 @@
+## Steps
+
+# references
+https://www.nginx.com/resources/wiki/start/topics/tutorials/install/
+
+sudo sudo su
+
+# Installation
+echo "[nginx]
+name=nginx repo
+baseurl=http://nginx.org/packages/centos/7/\$basearch/
+gpgcheck=0
+enabled=1" > /etc/yum.repos.d/nginx.repo
+
+yum install nginx
+
+# start nginx
+service nginx start
+
+# Configuration
+cd /etc/nginx
+vi nginx.conf
+# copy nginx.conf contents
+mkdir sites-enabled
+mkdir sites-available
+cd sites-enabled
+vi feedservices.conf
+# copy contents from nginx.server.conf
+
+# reload nginx
+service nginx reload

@@ -1,0 +1,12 @@
+## Installation
+
+wget http://www-eu.apache.org/dist/maven/maven-3/3.5.4/binaries/apache-maven-3.5.4-bin.tar.gz
+
+mkdir /opt/maven
+tar xzf apache-maven-3.5.4-bin.tar.gz -C /opt/maven --strip-components=1
+
+echo "export M2_HOME=/opt/maven
+export PATH=\${M2_HOME}/bin:\${PATH}" >> /etc/profile.d/maven.sh
+
+source /etc/profile.d/maven.sh
+mvn --version

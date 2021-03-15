@@ -1,0 +1,17 @@
+#Install ES
+
+reference - https://www.elastic.co/guide/en/kibana/current/rpm.html
+
+
+rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+echo "[kibana-6.x]
+name=Kibana repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/6.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md" >> /etc/yum.repos.d/kibana.repo
+
+sudo yum install kibana

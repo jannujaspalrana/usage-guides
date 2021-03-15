@@ -1,0 +1,22 @@
+## mod_wsgi Installation
+
+# Download
+wget https://github.com/GrahamDumpleton/mod_wsgi/archive/4.6.4.tar.gz
+
+# extract and cd
+tar -xzf 4.6.4.tar.gz
+cd mod_wsgi-4.6.4/
+
+# load python virtual env
+source <path_to_virtual_env>/bin/activate
+
+#configure
+./configure --with-apxs=/opt/apache-httpd/bin/apxs --with-python=/usr/local/bin/python3.6
+
+# make and install
+LD_RUN_PATH=/usr/local/lib make
+make install
+
+
+# References
+http://modwsgi.readthedocs.io/en/develop/user-guides/quick-installation-guide.html

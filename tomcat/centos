@@ -1,0 +1,36 @@
+
+## Reference
+https://www.digitalocean.com/community/tutorials/how-to-install-apache-tomcat-8-on-centos-7
+
+## Install Java
+
+## Install tomcat8
+wget http://mirrors.wuchna.com/apachemirror/tomcat/tomcat-8/v8.5.34/bin/apache-tomcat-8.5.34.tar.gz
+mkdir /opt/tomcat
+tar xf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1
+
+# user creation
+sudo groupadd tomcat
+sudo useradd -M -s /bin/nologin -g tomcat -d /opt/tomcat tomcat
+
+# permissions
+cd /opt/tomcat
+sudo chgrp -R tomcat /opt/tomcat
+sudo chmod -R g+r conf
+sudo chmod g+x conf
+sudo chown -R tomcat webapps/ work/ temp/ logs/
+
+## Configuration
+# configure JVM args
+#sudo echo "CATALINA_OPTS=\"\$CATALINA_OPTS -Denv=staging\"" >> /opt/tomcat/bin/setenv.sh
+#sudo echo "CATALINA_OPTS=\"\$CATALINA_OPTS -Denv=prod\"" >> /opt/tomcat/bin/setenv.sh
+
+# Add service file
+# tomcat can be changed to anything and should be consistent across all files
+vi /etc/init.d/tomcat
+    add contents from service file
+chmod u+x /etc/init.d/tomcat
+vi /etc/sysconfig/tomcat
+    add contents from sysconfig file
+
+service tomcat start

@@ -1,0 +1,7 @@
+## Installation
+
+reference - https://linuxize.com/post/install-java-on-centos-7/
+
+curl -L -b "oraclelicense=a" -O http://download.oracle.com/otn-pub/java/jdk/8u181-b13/96a7b8442fe848ef90c96a2fad6ed6d1/jdk-8u181-linux-x64.rpm
+sudo yum localinstall jdk-8u181-linux-x64.rpm
+javac -version

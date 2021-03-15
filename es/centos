@@ -1,0 +1,102 @@
+## Install Java
+# download rpm
+sudo yum install initscripts fontconfig
+sudo rpm -Uvh <path_to_rpm_file>
+
+reference - http://docs.grafana.org/installation/rpm/
+
+## Install elasticsearch
+reference - https://www.elastic.co/guide/en/elasticsearch/reference/current/rpm.html
+
+rpm --import https://artifacts.elastic.co/GPG-KEY-elasticsearch
+
+echo "[elasticsearch-6.x]
+name=Elasticsearch repository for 6.x packages
+baseurl=https://artifacts.elastic.co/packages/6.x/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md" >> /etc/yum.repos.d/elasticsearch.repo
+
+sudo yum install elasticsearch
+
+# To configure Elasticsearch to start automatically when the system boots up
+sudo chkconfig --add elasticsearch
+
+## Configuring elasticsearch
+sudo mkdir /data/elasticsearch
+sudo chown -R elasticsearch:elasticsearch /data/elasticsearch
+sudo vi /etc/elasticsearch/elasticsearch.yml
+# add/modify below config
+<-----------------------------------------------------------------------
+cluster.name: <cluster-name>
+node.name: ${HOSTNAME}
+path.data: /data/elasticsearch
+bootstrap.memory_lock: true
+network.host:
+discovery.zen.ping.unicast.hosts:
+discovery.zen.minimum_master_nodes:
+
+# if master use true else false
+node.master: true
+node.data: true
+
+# skip for data nodes
+bootstrap.system_call_filter: false
+http.cors.enabled: true
+http.cors.allow-origin: "*"
+
+http.pipelining.max_events: 25000
+----------------------------------------------------------------------->
+
+# for 16GB memory machine
+sudo vi /etc/elasticsearch/jvm.options
+# add/modify below config
+<-----------------------------------------------------------------------
+-Xms8g
+-Xmx8g
+----------------------------------------------------------------------->
+
+sudo swapoff -a
+
+sudo vi /etc/security/limits.conf
+# add/modify below config
+<-----------------------------------------------------------------------
+##<-------not needed
+*       soft    nofile          65000
+*       hard    nofile          65000
+root    soft    nofile          65536
+root    hard    nofile          65536
+
+root memlock unlimited
+##------->not needed
+
+elasticsearch soft nofile 65536
+elasticsearch hard nofile 65536
+elasticsearch soft nproc 2048
+elasticsearch hard nproc 2048
+elasticsearch soft memlock unlimited
+elasticsearch hard memlock unlimited
+----------------------------------------------------------------------->
+
+vi /usr/lib/systemd/system/elasticsearch.service
+<-----------------------------------------------------------------------
+# Specifies the maximum number of bytes of memory that may be locked into RAM
+# Set to "infinity" if you use the 'bootstrap.memory_lock: true' option
+# in elasticsearch.yml and 'MAX_LOCKED_MEMORY=unlimited' in /etc/sysconfig/elasticsearch
+LimitMEMLOCK=infinity
+----------------------------------------------------------------------->
+
+vi /etc/sysconfig/elasticsearch
+<-----------------------------------------------------------------------
+#if /tmp is mounted as noexec
+ES_JAVA_OPTS="-Djna.tmpdir=/var/lib/elasticsearch/tmp"
+
+#Don't add this at the end. It can cause problems with memory locking
+MAX_LOCKED_MEMORY=unlimited
+----------------------------------------------------------------------->
+
+
+Problems faced.
+https://www.linuxquestions.org/questions/linux-general-1/remove-noexec-from-tmp-directory-769763/

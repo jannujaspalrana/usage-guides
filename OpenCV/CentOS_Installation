@@ -1,0 +1,72 @@
+## Installation on CentOS, Python 2.7
+
+# login as root
+
+# Install pip, virtualenv
+easy_install pip
+pip install virtualenv
+
+# Create and load virtual environment
+virtualenv open-cv
+source <path_to_virtual_env>/bin/activate
+# here source open-cv/bin/activate
+
+# Install git
+yum install git
+
+# clone opencv source code
+cd <repo path>
+git clone https://github.com/opencv/opencv
+git clone https://github.com/opencv/opencv_contrib
+git checkout <version>(3.4.0 at the time of writing)
+# here git checkout 3.4.0
+
+# Install dependencies
+yum install cmake
+yum install python-devel numpy
+yum install gcc gcc-c++
+yum install tbb-devel
+yum install -y eigen3-devel —enablerepo=epel
+pip install numpy
+
+# Install dependencies for GTK for GUI libraries
+yum install -y gcc g++ gtk+-devel libjpeg-devel libtiff-devel jasper-devel libpng-devel zlib-devel unzip
+yum install gtk2-devel
+yum install libdc1394-devel
+yum install libv4l-devel
+yum install ffmpeg-devel
+yum install gstreamer-plugins-base-devel
+
+# Optional dependencies
+yum install libpng-devel
+yum install libjpeg-turbo-devel
+yum install jasper-devel
+yum install openexr-devel
+yum install libtiff-devel
+yum install libwebp-devel
+
+# create build dir
+mkdir build
+cd build
+
+# build and install
+# OPENCV_EXTRA_MODULES_PATH is the path where opencv_contrib is cloned
+cmake -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules/ \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -D INSTALL_PYTHON_EXAMPLES=ON ..
+
+make -j5
+make install
+
+find / -name "cv2.so"
+# cv2.so may be found at <git-repo-path>/build/lib/cv2.so or/and /usr/local/lib/python2.7/site-packages/cv2.so
+move to site-packages
+
+
+# References
+http://codedelish.com/resources/OpenCV/opencv-install.html
+http://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_setup/py_setup_in_fedora/py_setup_in_fedora.html
+
+# troubleshoot
+https://stackoverflow.com/questions/12335848/opencv-program-compile-error-libopencv-core-so-2-4-cannot-open-shared-object-f

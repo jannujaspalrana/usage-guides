@@ -1,0 +1,65 @@
+## Configuration
+
+# default config file path = /etc/td-agent/td-agent.conf
+# log file location : /var/log/td-agent/td-agent.log
+
+# start service
+systemctl restart td-agent.service
+
+# nginx log parsing
+<source>
+  @type tail
+  format /^"(?<remote>[^ ]*)" \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*) +\S*)?" "(?<code>[^ ]*)" "(?<size>[^ ]*)" "(?<nginx_time>[^ ]*)" "(?<origin_time>[^ ]*)" "(?<origin_ip>[^ ]*)" "(?<referer>[^\"]*)" "(?<user_agent>[^\"]*)" "(?<remote_user>[^ ]*)" (?<x_forwarded_for>[^ ]*(?:,\s+[^ ]+)*)"?$/
+  time_format %d/%b/%Y:%H:%M:%S %z
+  path /log/nginx/mycms_access.log
+  tag td.nginx.nprss.212
+</source>
+<filter td.nginx.nprss.*>
+  @type grep
+  <exclude>
+    key user_agent
+    pattern nagios
+  </exclude>
+</filter>
+<filter td.nginx.nprss.*>
+  @type typecast
+  types code:integer,size:integer
+</filter>
+<match td.nginx.nprss.*>
+  @type elasticsearch
+  logstash_format true
+  logstash_prefix nprss_nginx # defaults to "logstash"
+  host 192.168.34.226 #(optional; default="localhost")
+  port 9200 #(optional; default=9200)
+  index_name nprss_nginx #(optional; default=fluentd)
+  type_name fluentd #(optional; default=fluentd)
+</match>
+
+# apache log with %T{ms}
+<source>
+  @type tail
+  format /^(?<origin_ip>([0-9]+\.){3}([0-9]+)) (\S+) (\S+) ((\[(?<request_time>.*?)\])) (\"(?<method>\S+)) (?<path>\S+) (\S+)" (?<code>[0-9]{3}) (?<size>[0-9]+) (?<response_time>[0-9]+) ("\S+") ("(?<user_agent>.*?)")$/
+  time_format %d/%b/%Y:%H:%M:%S %z
+  path /log/apache-httpd/access_log
+  tag td.apache.125
+</source>
+<filter td.apache.*>
+  @type grep
+  <exclude>
+    key user_agent
+    pattern nagios
+  </exclude>
+</filter>
+<filter td.apache.*>
+  @type typecast
+  types code:integer,size:integer,response_time:integer
+</filter>
+<match td.apache.*>
+  @type elasticsearch
+  logstash_format true
+  logstash_prefix facedetector_apache # defaults to "logstash"
+  host 192.168.34.226 #(optional; default="localhost")
+  port 9200 #(optional; default=9200)
+  index_name facedetector_apache #(optional; default=fluentd)
+  type_name fluentd #(optional; default=fluentd)
+</match>
